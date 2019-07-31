@@ -34,29 +34,40 @@ namespace ChallengeSlotMachine
             SpinImage3.ImageUrl = "/Images/" + image3 + ".png";
 
             string winCondition = null;
-            //TODO Evaluate images
 
-            //TODO Determine win/loss
-            if (DetermineWinOrLose(image1, image2, image3, out winCondition))
+            bool win = DetermineIfWin(image1, image2, image3, out winCondition);
+            
+            int modifier = DeterminePayoutModifier(winCondition, image1, image2, image3);
+
+            int winnings = currentBet * modifier;
+
+            if (win)
             {
-                //TODO Find payout modifier
-                DeterminePayout();
+                SpinResultLabel.Text = String.Format("You won {0:C}. Your bet of {1:C} seems to have been somewhat worth it.", System.Math.Abs(modifier), currentBet);
             }
 
-            //TODO Calculate winnings (if applicable)
-
-            //TODO Calculate loss (different method?)
-
-            //TODO Output result of current bet with win/loss amount
-
+            if (!win)
+            {
+                SpinResultLabel.Text = String.Format("You lost {0:C}. Your bet of {1:C} is mine now.", System.Math.Abs(modifier), currentBet);
+            }
             //TODO Update player's wallet value
 
             //TODO Display player's updated wallet value
 
-            //TestingLabel.Text = image1URL;
+            //TESTING CODE
+            /*
+            if (win)
+            {
+                TestingLabel.Text = "Winnings = " + winnings;
+            }
+
+            if (!win)
+            {
+                TestingLabel.Text = "Losses = " + winnings;
+            }
+            */
 
         }
-
 
         private bool GetBet(out int currentBet)
         {
@@ -77,7 +88,7 @@ namespace ChallengeSlotMachine
             string[] imageNames = new string[12] { "Bar", "Bell", "Cherry", "Clover", "Diamond", "HorseShoe", "Lemon", "Orange", "Plum", "Seven", "Strawberry", "Watermellon" };
             return imageNames[random.Next(0, imageNames.Length)];
         }
-        private bool DetermineWinOrLose(string image1, string image2, string image3, out string winCondition)
+        private bool DetermineIfWin(string image1, string image2, string image3, out string winCondition)
         {
             winCondition = null;
 
@@ -94,12 +105,17 @@ namespace ChallengeSlotMachine
                     return true;
                 }
                 else
+                {
+                    winCondition = "LOSS";
                     return false;
+                }
+                    
             }
+            winCondition = "LOSS";
             return false;
         }
 
-        private int DeterminePayout()
+        private int DeterminePayoutModifier(string winCondition, string image1, string image2, string image3)
         {
             if (winCondition == "Sevens")
                 return 100;
@@ -117,11 +133,11 @@ namespace ChallengeSlotMachine
                 if (image3 == "Cherry")
                     cherryCount++;
 
-                return cherryCount++;
+                return ++cherryCount;
             }
 
             else
-                return 0;
+                return -1;
         }
 
     }
