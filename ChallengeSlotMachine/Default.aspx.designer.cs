@@ -76,13 +76,13 @@ namespace ChallengeSlotMachine {
         protected global::System.Web.UI.WebControls.Label SpinResultLabel;
         
         /// <summary>
-        /// currentWalletTotal control.
+        /// currentWalletTotalLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label currentWalletTotal;
+        protected global::System.Web.UI.WebControls.Label currentWalletTotalLabel;
         
         /// <summary>
         /// TestingLabel control.

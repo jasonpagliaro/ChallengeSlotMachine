@@ -9,9 +9,11 @@ namespace ChallengeSlotMachine
 {
     public partial class Default : System.Web.UI.Page
     {
+        Random random = new Random();
         protected void Page_Load(object sender, EventArgs e)
         {
-            //TODO Display player's current wallet
+            int walletTotal = 100;
+            UpdateWalletTotal(walletTotal);
         }
 
         protected void LeverPullButton_Click(object sender, EventArgs e)
@@ -22,9 +24,10 @@ namespace ChallengeSlotMachine
             {
                 SpinResultLabel.Text = "Please enter a valid dollar amount!";
             }
-
-
-            //TODO Display random images
+            
+            SpinImage1.ImageUrl = GetRandomImageURL();
+            SpinImage2.ImageUrl = GetRandomImageURL();
+            SpinImage3.ImageUrl = GetRandomImageURL();
 
             //TODO Evaluate images
 
@@ -40,7 +43,10 @@ namespace ChallengeSlotMachine
 
             //TODO Update player's wallet value
 
-            TestingLabel.Text = currentBet.ToString();
+            //TODO Display player's updated wallet value
+
+            //TestingLabel.Text = image1URL;
+
         }
 
         private bool GetBet(out int currentBet)
@@ -51,5 +57,17 @@ namespace ChallengeSlotMachine
             currentBet = int.Parse(BetTextBox.Text);
             return true;
         }
+
+        private void UpdateWalletTotal(int walletTotal)
+        {
+            currentWalletTotalLabel.Text = walletTotal.ToString();
+        }
+
+        private string GetRandomImageURL()
+        {
+            string[] imageNames = new string[12] { "Bar", "Bell", "Cherry", "Clover", "Diamond", "HorseShoe", "Lemon", "Orange", "Plum", "Seven", "Strawberry", "Watermellon" };
+            return "/Images/" + imageNames[random.Next(0, imageNames.Length)] + ".png";
+        }
+
     }
 }

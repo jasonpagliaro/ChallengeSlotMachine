@@ -19,8 +19,7 @@
             <asp:Image ID="SpinImage3" runat="server" Height="150px" />
             <br />
             <br />
-            Your Bet:
-            <asp:TextBox ID="BetTextBox" runat="server"></asp:TextBox>
+            Your Bet: <asp:TextBox ID="BetTextBox" runat="server"></asp:TextBox>
             <br />
             <br />
             <asp:Button ID="LeverPullButton" runat="server" OnClick="LeverPullButton_Click" Text="Pull the Lever!" />
@@ -30,7 +29,7 @@
             <br />
             <br />
             Player&#39;s Money:
-            <asp:Label ID="currentWalletTotal" runat="server"></asp:Label>
+            <asp:Label ID="currentWalletTotalLabel" runat="server"></asp:Label>
             <br />
             <br />
             <asp:Label ID="TestingLabel" runat="server" Text="Label"></asp:Label>
