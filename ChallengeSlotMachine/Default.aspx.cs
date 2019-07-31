@@ -114,7 +114,7 @@ namespace ChallengeSlotMachine
                 if (image2 == "Cherry")
                     cherryCount++;
 
-                if (image2 == "Cherry")
+                if (image3 == "Cherry")
                     cherryCount++;
 
                 return cherryCount++;
