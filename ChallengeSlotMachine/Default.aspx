@@ -32,9 +32,6 @@
             <asp:Label ID="currentWalletTotalLabel" runat="server"></asp:Label>
             <br />
             <br />
-            <asp:Label ID="TestingLabel" runat="server" Text="Label"></asp:Label>
-            <br />
-            <br />
             1 Cherry - 2x Your Bet<br />
             2 Cherries - 3x Your Bet<br />
             3 Cherries - 4x Your Bet<br />
