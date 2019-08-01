@@ -9,16 +9,24 @@ namespace ChallengeSlotMachine
 {
     public partial class Default : System.Web.UI.Page
     {
+
         Random random = new Random();
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            int walletTotal = 100;
-            UpdateWalletTotal(walletTotal);
+            if (ViewState["wallet"] == null)
+            {
+                ViewState["wallet"] = 100;
+            }
+            int.Parse(ViewState["wallet"].ToString());
+            currentWalletTotalLabel.Text = ViewState["wallet"].ToString();
         }
 
         protected void LeverPullButton_Click(object sender, EventArgs e)
         {
             int currentBet = 0;
+
+            int wallet = int.Parse(ViewState["wallet"].ToString());
 
             if (!GetBet(out currentBet))
             {
@@ -36,37 +44,19 @@ namespace ChallengeSlotMachine
             string winCondition = null;
 
             bool win = DetermineIfWin(image1, image2, image3, out winCondition);
-            
+
             int modifier = DeterminePayoutModifier(winCondition, image1, image2, image3);
 
             int winnings = currentBet * modifier;
 
-            if (win)
-            {
-                SpinResultLabel.Text = String.Format("You won {0:C}. Your bet of {1:C} seems to have been somewhat worth it.", System.Math.Abs(modifier), currentBet);
-            }
-
-            if (!win)
-            {
-                SpinResultLabel.Text = String.Format("You lost {0:C}. Your bet of {1:C} is mine now.", System.Math.Abs(modifier), currentBet);
-            }
-            //TODO Update player's wallet value
+            DisplayAdjustmentText(win, winnings, currentBet);
 
             //TODO Display player's updated wallet value
+            wallet = UpdateWalletTotal(winnings, wallet);
 
-            //TESTING CODE
-            /*
-            if (win)
-            {
-                TestingLabel.Text = "Winnings = " + winnings;
-            }
+            currentWalletTotalLabel.Text = wallet.ToString();
 
-            if (!win)
-            {
-                TestingLabel.Text = "Losses = " + winnings;
-            }
-            */
-
+            ViewState["wallet"] = wallet;
         }
 
         private bool GetBet(out int currentBet)
@@ -78,9 +68,10 @@ namespace ChallengeSlotMachine
             return true;
         }
 
-        private void UpdateWalletTotal(int walletTotal)
+        private int UpdateWalletTotal(int wallet, int winnings)
         {
-            currentWalletTotalLabel.Text = walletTotal.ToString();
+            wallet += winnings;
+            return wallet;
         }
 
         private string GetRandomImageName()
@@ -109,7 +100,7 @@ namespace ChallengeSlotMachine
                     winCondition = "LOSS";
                     return false;
                 }
-                    
+
             }
             winCondition = "LOSS";
             return false;
@@ -138,6 +129,19 @@ namespace ChallengeSlotMachine
 
             else
                 return -1;
+        }
+
+        private void DisplayAdjustmentText(bool win, int winnings, int currentBet)
+        {
+            if (win)
+            {
+                SpinResultLabel.Text = String.Format("You won {0:C}. Your bet of {1:C} seems to have been somewhat worth it.", System.Math.Abs(winnings), currentBet);
+            }
+
+            if (!win)
+            {
+                SpinResultLabel.Text = String.Format("You lost {0:C}. Your bet of {1:C} is mine now.", System.Math.Abs(winnings), currentBet);
+            }
         }
 
     }
