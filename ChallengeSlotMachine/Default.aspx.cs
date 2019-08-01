@@ -18,19 +18,17 @@ namespace ChallengeSlotMachine
             {
                 ViewState["wallet"] = 100;
             }
-            int.Parse(ViewState["wallet"].ToString());
             currentWalletTotalLabel.Text = ViewState["wallet"].ToString();
         }
 
         protected void LeverPullButton_Click(object sender, EventArgs e)
         {
-            int currentBet = 0;
-
             int wallet = int.Parse(ViewState["wallet"].ToString());
 
-            if (!GetBet(out currentBet))
+            if (!GetBet(out int currentBet))
             {
                 SpinResultLabel.Text = "Please enter a valid dollar amount!";
+                return;
             }
 
             string image1 = GetRandomImageName();
@@ -41,9 +39,7 @@ namespace ChallengeSlotMachine
             SpinImage2.ImageUrl = "/Images/" + image2 + ".png";
             SpinImage3.ImageUrl = "/Images/" + image3 + ".png";
 
-            string winCondition = null;
-
-            bool win = DetermineIfWin(image1, image2, image3, out winCondition);
+            bool win = DetermineIfWin(image1, image2, image3, out string winCondition);
 
             int modifier = DeterminePayoutModifier(winCondition, image1, image2, image3);
 
@@ -51,7 +47,6 @@ namespace ChallengeSlotMachine
 
             DisplayAdjustmentText(win, winnings, currentBet);
 
-            //TODO Display player's updated wallet value
             wallet = UpdateWalletTotal(winnings, wallet);
 
             currentWalletTotalLabel.Text = wallet.ToString();
@@ -81,8 +76,6 @@ namespace ChallengeSlotMachine
         }
         private bool DetermineIfWin(string image1, string image2, string image3, out string winCondition)
         {
-            winCondition = null;
-
             if (image1 != "Bar" && image2 != "Bar" && image3 != "Bar")
             {
                 if (image1 == "Cherry" || image2 == "Cherry" || image3 == "Cherry")
@@ -109,7 +102,9 @@ namespace ChallengeSlotMachine
         private int DeterminePayoutModifier(string winCondition, string image1, string image2, string image3)
         {
             if (winCondition == "Sevens")
+            {
                 return 100;
+            }
 
             else if (winCondition == "Cherry")
             {
@@ -143,6 +138,5 @@ namespace ChallengeSlotMachine
                 SpinResultLabel.Text = String.Format("You lost {0:C}. Your bet of {1:C} is mine now.", System.Math.Abs(winnings), currentBet);
             }
         }
-
     }
 }
